@@ -1,6 +1,8 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 import javax.swing.JPanel;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
@@ -9,15 +11,21 @@ import inputs.MouseInputs;
 
 public class GamePanel extends JPanel{
 	private MouseInputs mouseInputs;
-	private int xDelta = 100, yDelta = 100;
+	private float xDelta = 100f, yDelta = 100f;
+	private float xDir = 0.008f, yDir = 0.008f;
+	private int frames = 0;
+	private long lastCheck;
+	private Color color = new Color(40,50,90);
+	private Random random;
 	
 	
 	public GamePanel() {
-			
+		random = new Random();
 		mouseInputs = new MouseInputs(this);
 		addKeyListener(new KeyboardInputs(this));
 		addMouseListener(mouseInputs);
 		addMouseMotionListener(mouseInputs);
+		
 	}
 	
 	public void changeXDelta(int value) {
@@ -27,18 +35,51 @@ public class GamePanel extends JPanel{
 	
 	public void changeYDelta(int value) {
 		this.yDelta += value;
-		repaint();
 	}
 	
 	public void setRectPos(int x , int y) {
 		this.xDelta = x;
 		this.yDelta = y;
-		repaint();
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		updateRectangle();
 		
-		g.fillRect(xDelta, yDelta, 200, 50);
+		g.setColor(color);
+		g.fillRect((int)xDelta, (int)yDelta, 200, 50);
+		
+		frames++;
+		
+		if(System.currentTimeMillis() - lastCheck >= 1000) {
+			lastCheck = System.currentTimeMillis();
+			System.out.println("FPS:"+lastCheck);
+			frames = 0;
+		}
+		repaint();
+	}
+
+	private void updateRectangle() {
+		xDelta += xDir;
+		if(xDelta > 400 || xDelta < 0) {
+			xDir *= -1;
+			color = getRandColor();
+		}
+			
+		
+		
+		yDelta += yDir;
+		
+		if(yDelta > 400 || yDelta < 0) 
+			yDir *= -1;
+		
+	}	
+	
+	private color getRandColor() {
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		
+		return new color(r,g,b);
 	}
 }
