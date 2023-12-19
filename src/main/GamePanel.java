@@ -66,20 +66,18 @@ public class GamePanel extends JPanel{
 			color = getRandColor();
 		}
 			
-		
-		
 		yDelta += yDir;
 		
 		if(yDelta > 400 || yDelta < 0) 
 			yDir *= -1;
-		
+			color = getRandColor();
+	}
+
+	private Color getRandColor() {
+		int r = random.nextInt(255);
+		int g = random.nextInt(255);
+		int b = random.nextInt(255);
+		return new Color(r,g,b);
 	}	
 	
-	private color getRandColor() {
-		int r = 0;
-		int g = 0;
-		int b = 0;
-		
-		return new color(r,g,b);
-	}
 }
